@@ -1,5 +1,5 @@
 public class SubTask extends Task {
-    private int epicId;
+    private final int epicId;
 
     SubTask(String name, String description, int epicId) {
         super(name, description);
