@@ -1,3 +1,9 @@
+import managers.TaskManager;
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
+import util.Status;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -17,17 +23,17 @@ public class Main {
         taskManager.newSubTask(subTask2);
         taskManager.newSubTask(subTask3);
         System.out.println("_________список задач");
-        System.out.println(taskManager.getAllTasks());
+        System.out.println(taskManager.getTasks());
         System.out.println("_________список эпиков");
-        System.out.println(taskManager.getAllEpic());
+        System.out.println(taskManager.getEpic());
         System.out.println("_________список подзадач");
-        System.out.println(taskManager.getAllSubTask());
+        System.out.println(taskManager.getSubTask());
         System.out.println("______________ задача по id");
         System.out.println(taskManager.getToIdTask(1));
         System.out.println("______________ эпик по id");
         System.out.println(taskManager.getToIdEpic(4));
         System.out.println("______________список подзадач эпика по id");
-        System.out.println(taskManager.getToIdSubtaskInEpic(4));
+        System.out.println(taskManager.getToIdSubtaskInEpic(3));
         System.out.println("______________ подзадача по id");
         System.out.println(taskManager.getToIdSubTask(7));
         System.out.println("______________вывод обновленого статуса списка задач по id");
@@ -35,7 +41,12 @@ public class Main {
         Task updateTask1 = taskManager.getToIdTask(valueId);
         updateTask1.setStatus(Status.IN_PROGRESS);
         taskManager.updateTask(valueId, updateTask1);
-        System.out.println(taskManager.getAll());
+        SubTask updateSubTask3 = taskManager.getToIdSubTask(6);
+        updateSubTask3.setStatus(Status.IN_PROGRESS);
+        taskManager.updateSubTask(6, updateSubTask3);
+        System.out.println(taskManager.getTasks());
+        System.out.println(taskManager.getEpic());
+        System.out.println(taskManager.getSubTask());
         System.out.println("______________вывод обновленого статуса списка задач по id и удаление задачи");
         Task updateTask2 = taskManager.getToIdTask(valueId);
         updateTask2.setStatus(Status.DONE);
@@ -45,11 +56,16 @@ public class Main {
         taskManager.updateSubTask(7, updateSubTask);
         taskManager.removeToIdEpic(5);
         taskManager.removeToIdTask(2);
-        System.out.println(taskManager.getAll());
+        System.out.println(taskManager.getTasks());
+        System.out.println(taskManager.getEpic());
+        System.out.println(taskManager.getSubTask());
+        taskManager.removeToIdSubTask(6);
         System.out.println("______________добавление статуса подзадачи");
         updateSubTask = taskManager.getToIdSubTask(7);
         updateSubTask.setStatus(Status.DONE);
         taskManager.updateSubTask(7, updateSubTask);
-        System.out.println(taskManager.getAll());
+        System.out.println(taskManager.getTasks());
+        System.out.println(taskManager.getEpic());
+        System.out.println(taskManager.getSubTask());
     }
 }

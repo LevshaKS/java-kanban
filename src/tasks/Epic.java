@@ -1,10 +1,14 @@
+package tasks;
+
+import util.Status;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
 
     private final ArrayList<Integer> listSubTaskId;
 
-    Epic(String name, String description) {
+    public Epic(String name, String description) {
         super(name, description);
         this.status = Status.NEW;
         listSubTaskId = new ArrayList<>();
@@ -20,6 +24,10 @@ public class Epic extends Task {
 
     public void removeValueListSubTask(Integer value) {
         listSubTaskId.remove(value);
+    }
+
+    public void clearListSubTask() {
+        listSubTaskId.clear();
     }
 
     @Override

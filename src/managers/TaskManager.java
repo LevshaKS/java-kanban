@@ -1,3 +1,9 @@
+package managers;
+
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
+import util.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +16,7 @@ public class TaskManager {
     private final HashMap<Integer, Epic> epicMaps;
     private final HashMap<Integer, SubTask> subTaskMaps;
 
-    TaskManager() {
+    public TaskManager() {
         taskMaps = new HashMap<>();
         epicMaps = new HashMap<>();
         subTaskMaps = new HashMap<>();
@@ -28,11 +34,8 @@ public class TaskManager {
         }
     }
 
-    public String getAllTasks() {      //вывод всего списка task
-        if (!taskMaps.isEmpty())
-            return taskMaps.values().toString();
-        else
-            return null;
+    public ArrayList<Task> getTasks() {      //вывод всего списка task
+        return new ArrayList<>(taskMaps.values());
     }
 
     public void clearTask() {       // очистить весь список task
@@ -40,15 +43,11 @@ public class TaskManager {
     }
 
     public Task getToIdTask(int id) {        // получение task по id
-        if (taskMaps.containsKey(id))
-            return taskMaps.get(id);
-        else
-            return null;
+        return taskMaps.get(id);
     }
 
     public void removeToIdTask(int id) {        // удаление task по id
-        if (taskMaps.containsKey(id))
-            taskMaps.remove(id);
+        taskMaps.remove(id);
     }
 
     public void updateTask(int id, Task task) {     // передача обновленого task по id
@@ -64,32 +63,23 @@ public class TaskManager {
         }
     }
 
-
-    public String getAllEpic() {        //вывод списка epic
-        if (!epicMaps.isEmpty())
-            return epicMaps.values().toString();
-        else
-            return null;
+    public ArrayList<Epic> getEpic() {        //вывод списка epic
+        return new ArrayList<>(epicMaps.values());
     }
-
 
     public Epic getToIdEpic(int id) {        // получение epic по id
-        if (epicMaps.containsKey(id))
-            return epicMaps.get(id);
-        else
-            return null;
+        return epicMaps.get(id);
     }
 
-    public String getToIdSubtaskInEpic(int id) { ///получение списка subtask по id epic
-        String result = "";
+    public ArrayList<SubTask> getToIdSubtaskInEpic(int id) { ///получение списка subtask по id epic
+        ArrayList<SubTask> subTasks = new ArrayList<>();
         if (epicMaps.containsKey(id)) {
             ArrayList<Integer> subTaskList = epicMaps.get(id).getSubTaskList();
-
-            for (int i = 0; i < subTaskList.size(); i++) {
-                result += subTaskMaps.get(subTaskList.get(i));
+            for (Integer idSubTask : subTaskList) {
+                subTasks.add(subTaskMaps.get(idSubTask));
             }
         }
-        return result;
+        return subTasks;
     }
 
     public void removeToIdEpic(int id) {        // удаление epic по id
@@ -107,11 +97,9 @@ public class TaskManager {
         clearSubTask();
     }
 
-
-//метод subtask
-
-    public String getAllSubTask() {  //вывод списка subtask
-        return subTaskMaps.values().toString();
+    //метод subtask
+    public ArrayList<SubTask> getSubTask() {  //вывод списка subtask
+        return new ArrayList<>(subTaskMaps.values());
     }
 
     public void newSubTask(SubTask subTask) {    //создание новой subtask
@@ -125,14 +113,15 @@ public class TaskManager {
     }
 
     public void clearSubTask() { // очистка списка subtask
+        for (Epic epics : epicMaps.values()) {
+            epics.clearListSubTask();
+            calculateStatusEpic(epics.getId());
+        }
         subTaskMaps.clear();
     }
 
     public SubTask getToIdSubTask(int id) { //получение subtask по id
-        if (subTaskMaps.containsKey(id)) {
-            return subTaskMaps.get(id);
-        }
-        return null;
+        return subTaskMaps.get(id);
     }
 
     public void removeToIdSubTask(int id) {        // удаление subtask по id
@@ -159,28 +148,25 @@ public class TaskManager {
                 epicMaps.get(epicId).setStatus(Status.NEW);
                 return;
             }
+
             if (listSubTask.size() == 1) {
                 epicMaps.get(epicId).setStatus(subTaskMaps.get(listSubTask.get(0)).getStatus());
                 return;
             }
-            if (listSubTask.size() > 1) {
-                for (Integer listId : listSubTask) {
-                    if (subTaskMaps.get(listId).getStatus() != Status.NEW)
-                        epicMaps.get(epicId).setStatus(Status.IN_PROGRESS);
-                    if (subTaskMaps.get(listId).getStatus() == Status.DONE)
-                        count++;
-                }
+
+            for (Integer listId : listSubTask) {
+                if (subTaskMaps.get(listId).getStatus() != Status.NEW)
+                    epicMaps.get(epicId).setStatus(Status.IN_PROGRESS);
+                if (subTaskMaps.get(listId).getStatus() == Status.DONE)
+                    count++;
             }
+
             if (count > 0 && count < listSubTask.size()) {
                 epicMaps.get(epicId).setStatus(Status.IN_PROGRESS);
             } else if (count == listSubTask.size()) {
                 epicMaps.get(epicId).setStatus(Status.DONE);
-             epicMaps.get(epicId).setStatus(Status.NEW);
+                epicMaps.get(epicId).setStatus(Status.NEW);
             }
         }
-    }
-
-    public String getAll() {        //вывод всех списков
-        return getAllTasks() + getAllEpic() + getAllSubTask();
     }
 }
