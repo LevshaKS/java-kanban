@@ -16,6 +16,14 @@ public class Task {
         this.status = Status.NEW;
     }
 
+    public Task(Task task) {
+        this.name = task.getName();
+        this.description = task.getDescription();
+        this.status = task.getStatus();
+        this.id = task.getId();
+
+    }
+
     public String getName() {
         return name;
     }
@@ -57,12 +65,12 @@ public class Task {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return Objects.equals(name, task.name) && Objects.equals(description, task.description);
+        return Objects.equals(name, task.name) && Objects.equals(description, task.description) && Objects.equals(status, task.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description);
+        return Objects.hash(name, description, status);
     }
 }
 
