@@ -24,7 +24,6 @@ public class Main {
         taskManager.newSubTask(subTask1);
         taskManager.newSubTask(subTask2);
         taskManager.newSubTask(subTask3);
-
         printAllTasks(taskManager);
 
         System.out.println("______________ задача по id");
@@ -35,7 +34,6 @@ public class Main {
         System.out.println(taskManager.getToIdSubtaskInEpic(3));
         System.out.println("______________ подзадача по id");
         System.out.println(taskManager.getToIdSubTask(7));
-
         printAllTasks(taskManager);
 
         System.out.println("______________вывод обновленого статуса списка задач по id");
@@ -49,7 +47,6 @@ public class Main {
 
         System.out.println("______________ задача по id");
         System.out.println(taskManager.getToIdTask(1));
-
         printAllTasks(taskManager);
     }
 

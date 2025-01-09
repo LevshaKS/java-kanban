@@ -14,6 +14,7 @@ public class inMemoryTaskManagerTest {
 
     managers.inMemoryTaskManager taskManager = (managers.inMemoryTaskManager) Managers.getDefault();
 
+
     @Test
     public void NewManagersNotNull() {
         TaskManager taskManager1 = Managers.getDefault();
