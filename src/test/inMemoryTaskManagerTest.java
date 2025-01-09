@@ -2,7 +2,6 @@ package test;
 
 import managers.Managers;
 import managers.TaskManager;
-import managers.inMemoryTaskManager;
 import org.junit.Assert;
 import org.junit.Test;
 import tasks.Epic;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class inMemoryTaskManagerTest {
 
-    inMemoryTaskManager taskManager = (inMemoryTaskManager) Managers.getDefault();
+    managers.inMemoryTaskManager taskManager = (managers.inMemoryTaskManager) Managers.getDefault();
 
     @Test
     public void NewManagersNotNull() {
