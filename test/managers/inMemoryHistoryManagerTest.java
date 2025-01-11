@@ -1,7 +1,6 @@
-package test;
+package managers;
 
-import managers.Managers;
-import managers.inMemoryTaskManager;
+
 import org.junit.Assert;
 import org.junit.Test;
 import tasks.Epic;
@@ -25,14 +24,21 @@ public class inMemoryHistoryManagerTest {
         taskManager.getToIdTask(1);
         List<Task> history = taskManager.getHistory();
         Assert.assertNotNull("После просмотра задач история не должна быть пустой", history);
-        Assert.assertEquals("После просмотра задач история не должна быть пустой, 1 элемент", 1, history.size());
+        Assert.assertEquals("После просмотра задач история не должна быть пустой, 1 элемент", 1,
+                history.size());
+        taskManager.getToIdTask(10);
+        Assert.assertEquals("при запросе задачи с несуществующим id не должна добавлятся в историю", 1,
+                history.size());
         taskManager.getToIdEpic(2);
         Assert.assertEquals("Задача не добавилась в историю", 2, taskManager.getHistory().size());
         Task updste = taskManager.getToIdTask(1);
         updste.setStatus(Status.IN_PROGRESS);
         taskManager.updateTask(1, updste);
         taskManager.getToIdTask(1);
-        Assert.assertEquals("С одинаковым статусом не равны задачи в истории", taskManager.getHistory().get(0), taskManager.getHistory().get(2));
-        Assert.assertNotEquals("с разным статусом равны задачи в истории", taskManager.getHistory().get(0), taskManager.getHistory().get(3));
+        Assert.assertEquals("С одинаковым статусом не равны задачи в истории", taskManager.getHistory().get(0),
+                taskManager.getHistory().get(2));
+        Assert.assertNotEquals("с разным статусом равны задачи в истории", taskManager.getHistory().get(0),
+                taskManager.getHistory().get(3));
     }
 }
+

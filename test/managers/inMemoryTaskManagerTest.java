@@ -1,7 +1,6 @@
-package test;
+package managers;
 
-import managers.Managers;
-import managers.TaskManager;
+
 import org.junit.Assert;
 import org.junit.Test;
 import tasks.Epic;
@@ -16,9 +15,16 @@ public class inMemoryTaskManagerTest {
 
 
     @Test
-    public void NewManagersNotNull() {
+    public void NewManagers() {
         TaskManager taskManager1 = Managers.getDefault();
+        TaskManager taskManager2 = Managers.getDefault();
         Assert.assertNotNull("Не создался новый элемент", taskManager1);
+        Assert.assertNotNull("Не создался новый элемент", taskManager2);
+        Task task = new Task("test add task", "add task descriprion");
+        taskManager1.newTack(task);
+        taskManager2.newTack(task);
+        Assert.assertNotEquals("задачи в разных менеджерах должны быть не равны",
+        taskManager1.getToIdTask(1), taskManager1.getToIdTask(2));
     }
 
     @Test
@@ -63,10 +69,12 @@ public class inMemoryTaskManagerTest {
         Assert.assertNotNull("Список подзадач не возращается", subTasks);
         Assert.assertEquals("Неверное количество подзадач", 1, subTasks.size());
         Assert.assertEquals("Не совпадает подзадача с подзадачей в списке", subTask, subTasks.get(0));
-        Assert.assertEquals("Не совпадает возращаемая подзадача по id эпика", subTasks, taskManager.getToIdSubtaskInEpic(1));
+        Assert.assertEquals("Не совпадает возращаемая подзадача по id эпика", subTasks,
+                taskManager.getToIdSubtaskInEpic(1));
         taskManager.removeToIdSubTask(2);
         subTasks = taskManager.getSubTask();
         Assert.assertEquals("Неверное количество подзадач", 0, subTasks.size());
-        Assert.assertEquals("Из списка подзадач в эпике не удалилась подзадача", 0, taskManager.getToIdSubtaskInEpic(1).size());
+        Assert.assertEquals("Из списка подзадач в эпике не удалилась подзадача", 0,
+                taskManager.getToIdSubtaskInEpic(1).size());
     }
 }

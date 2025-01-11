@@ -11,7 +11,7 @@ import java.util.List;
 
 public class inMemoryTaskManager implements TaskManager {
 
-    public static int id;
+    public int id;
 
     private final HashMap<Integer, Task> taskMaps;
     private final HashMap<Integer, Epic> epicMaps;

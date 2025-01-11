@@ -15,14 +15,11 @@ public class inMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        if (listHistory.isEmpty())
-            listHistory.addLast(new Task(task));
-        else if (listHistory.size() < 10) {
-            listHistory.addLast(new Task(task));
-        } else {
-            listHistory.remove(0);
-            listHistory.addLast(new Task(task));
-        }
+        if (task == null)
+            return;
+        listHistory.addLast(new Task(task));
+        if (listHistory.size() > 10)
+            listHistory.removeFirst();
     }
 
     @Override
