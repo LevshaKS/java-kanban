@@ -58,6 +58,7 @@ public class inMemoryTaskManager implements TaskManager {
     @Override
     public void removeToIdTask(int id) {        // удаление task по id
         taskMaps.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
@@ -104,9 +105,11 @@ public class inMemoryTaskManager implements TaskManager {
             ArrayList<Integer> subTaskList = epicMaps.get(id).getSubTaskList();
             for (int subTask : subTaskList) {
                 subTaskMaps.remove(subTask);
+                historyManager.remove(subTask);
             }
         }
         epicMaps.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
@@ -153,6 +156,7 @@ public class inMemoryTaskManager implements TaskManager {
             int epicid = subTaskMaps.get(id).getEpicId();
             epicMaps.get(epicid).removeValueListSubTask(id);
             subTaskMaps.remove(id);
+            historyManager.remove(id);
             calculateStatusEpic(epicid);
         }
     }
