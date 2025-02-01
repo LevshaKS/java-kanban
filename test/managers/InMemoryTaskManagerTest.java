@@ -9,9 +9,9 @@ import tasks.Task;
 
 import java.util.List;
 
-public class inMemoryTaskManagerTest {
+public class InMemoryTaskManagerTest {
 
-    managers.inMemoryTaskManager taskManager = (managers.inMemoryTaskManager) Managers.getDefault();
+    managers.InMemoryTaskManager taskManager = (managers.InMemoryTaskManager) Managers.getDefault();
 
 
     @Test
