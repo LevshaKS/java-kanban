@@ -5,6 +5,7 @@ import org.junit.Test;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
+
 import java.util.List;
 
 public class InMemoryHistoryManagerTest {
@@ -81,6 +82,6 @@ public class InMemoryHistoryManagerTest {
         historyManager.remove(1);
         Assert.assertEquals("при удаление первого History порядок не должен менятся", List.of(epic),
                 historyManager.getHistory());
-     }
+    }
 }
 
