@@ -7,7 +7,7 @@ import tasks.SubTask;
 import tasks.Task;
 import java.util.List;
 
-public class inMemoryHistoryManagerTest {
+public class InMemoryHistoryManagerTest {
 
     private final HistoryManager historyManager = new inMemoryHistoryManager();
     private final inMemoryTaskManager taskManager = new inMemoryTaskManager(historyManager);
