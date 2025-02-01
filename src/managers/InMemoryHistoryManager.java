@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class inMemoryHistoryManager implements HistoryManager {
+public class InMemoryHistoryManager implements HistoryManager {
 
     private static class Node {
         Task task; //задача
@@ -25,7 +25,7 @@ public class inMemoryHistoryManager implements HistoryManager {
     private Node head;  //голова Нода
     private Node tail;  // хвост Нода
 
-    public inMemoryHistoryManager() {
+    public InMemoryHistoryManager() {
     }
 
     @Override

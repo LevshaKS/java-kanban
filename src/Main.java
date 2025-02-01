@@ -1,4 +1,4 @@
-import managers.inMemoryTaskManager;
+import managers.InMemoryTaskManager;
 import managers.Managers;
 import tasks.Epic;
 import tasks.SubTask;
@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        inMemoryTaskManager taskManager = (inMemoryTaskManager) Managers.getDefault();
+        InMemoryTaskManager taskManager = (InMemoryTaskManager) Managers.getDefault();
         Task task1 = new Task("задача_1", "описание задачи_1");
         Task task2 = new Task("задача_2", "описание задачи_2");
         taskManager.newTack(task1);
@@ -67,7 +67,7 @@ public class Main {
         printAllTasks(taskManager);
     }
 
-    private static void printAllTasks(inMemoryTaskManager manager) {
+    private static void printAllTasks(InMemoryTaskManager manager) {
         System.out.println("Задачи:");
         for (Task task : manager.getTasks()) {
             System.out.println(task);

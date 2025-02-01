@@ -7,10 +7,10 @@ import tasks.SubTask;
 import tasks.Task;
 import java.util.List;
 
-public class inMemoryHistoryManagerTest {
+public class InMemoryHistoryManagerTest {
 
-    private final HistoryManager historyManager = new inMemoryHistoryManager();
-    private final inMemoryTaskManager taskManager = new inMemoryTaskManager(historyManager);
+    private final HistoryManager historyManager = new InMemoryHistoryManager();
+    private final InMemoryTaskManager taskManager = new InMemoryTaskManager(historyManager);
     private final Task task = new Task("test add task", "add task descriprion");
     private final Epic epic = new Epic("test add  epic", "add epic descriprion");
     private final SubTask subTask = new SubTask("test add subtask", "add subtask descriprion", 2);

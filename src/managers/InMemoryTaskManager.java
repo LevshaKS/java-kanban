@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class inMemoryTaskManager implements TaskManager {
+public class InMemoryTaskManager implements TaskManager {
 
     public int id;
 
@@ -18,7 +18,7 @@ public class inMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, SubTask> subTaskMaps;
     private final HistoryManager historyManager;
 
-    public inMemoryTaskManager(HistoryManager historyManager) {
+    public InMemoryTaskManager(HistoryManager historyManager) {
         taskMaps = new HashMap<>();
         epicMaps = new HashMap<>();
         subTaskMaps = new HashMap<>();
