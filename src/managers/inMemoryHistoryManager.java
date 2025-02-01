@@ -41,11 +41,11 @@ public class inMemoryHistoryManager implements HistoryManager {
 
         final Node node = new Node(tail, task, null);
         if (head == null)
-            head = tail = node;
+            head = node;
         else {
-            tail = node;
-            tail.prev.next = node;
+            node.prev.next = node;
         }
+        tail = node;
         nodeMap.put(task.getId(), node);
     }
 
@@ -72,18 +72,18 @@ public class inMemoryHistoryManager implements HistoryManager {
 
     private void removeNode(Node node) { ///удаляем повторяущию ноду из истории
         nodeMap.remove(node.task.getId());
-
         if (node.prev == null) {
             head = node.next;
-            node.next.prev = null;
-        } else if (node.prev != null && node.next != null) {
+            if (head == null)
+                tail = null;
+            else
+                head.prev = null;
+        } else if (node.next != null) {
             node.prev.next = node.next;
             node.next.prev = node.prev;
         } else {
             tail = node.prev;
             node.prev.next = null;
-
         }
     }
-
 }

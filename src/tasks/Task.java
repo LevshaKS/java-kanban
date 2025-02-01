@@ -21,7 +21,6 @@ public class Task {
         this.description = task.getDescription();
         this.status = task.getStatus();
         this.id = task.getId();
-
     }
 
     public String getName() {

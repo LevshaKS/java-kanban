@@ -24,7 +24,7 @@ public class inMemoryTaskManagerTest {
         taskManager1.newTack(task);
         taskManager2.newTack(task);
         Assert.assertNotEquals("задачи в разных менеджерах должны быть не равны",
-        taskManager1.getToIdTask(1), taskManager1.getToIdTask(2));
+                taskManager1.getToIdTask(1), taskManager1.getToIdTask(2));
     }
 
     @Test
@@ -40,6 +40,7 @@ public class inMemoryTaskManagerTest {
         taskManager.removeToIdTask(1);
         tasks = taskManager.getTasks();
         Assert.assertEquals("Не совпадает список после удаления", 0, tasks.size());
+        Assert.assertTrue("при удаление необходимо удалить из истории ", taskManager.getHistory().isEmpty());
     }
 
     @Test
@@ -55,6 +56,7 @@ public class inMemoryTaskManagerTest {
         taskManager.removeToIdEpic(1);
         epics = taskManager.getEpic();
         Assert.assertEquals("Не совпадает эпик после удаления", 0, epics.size());
+        Assert.assertTrue("при удаление необходимо удалить из истории ", taskManager.getHistory().isEmpty());
     }
 
     @Test
@@ -76,5 +78,6 @@ public class inMemoryTaskManagerTest {
         Assert.assertEquals("Неверное количество подзадач", 0, subTasks.size());
         Assert.assertEquals("Из списка подзадач в эпике не удалилась подзадача", 0,
                 taskManager.getToIdSubtaskInEpic(1).size());
+        Assert.assertTrue("при удаление необходимо удалить из истории ", taskManager.getHistory().isEmpty());
     }
 }
