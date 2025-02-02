@@ -46,6 +46,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearTask() {       // очистить весь список task
+        for (int id : taskMaps.keySet()) {
+            historyManager.remove(id);
+        }
         taskMaps.clear();
     }
 
@@ -114,8 +117,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearEpic() {           // очиска списка epic
-        epicMaps.clear();
         clearSubTask();
+        for (int id : epicMaps.keySet()) {
+            historyManager.remove(id);
+        }
+        epicMaps.clear();
+
     }
 
     //метод subtask
@@ -140,6 +147,9 @@ public class InMemoryTaskManager implements TaskManager {
         for (Epic epics : epicMaps.values()) {
             epics.clearListSubTask();
             calculateStatusEpic(epics.getId());
+        }
+        for (int id : subTaskMaps.keySet()) {
+            historyManager.remove(id);
         }
         subTaskMaps.clear();
     }

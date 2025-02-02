@@ -62,8 +62,8 @@ public class Main {
         printAllTasks(taskManager);
 
         System.out.println("______________ удаление задачи и эпика");
-       taskManager.removeToIdEpic(3);
-       taskManager.removeToIdTask(1);
+        taskManager.removeToIdEpic(3);
+        taskManager.removeToIdTask(1);
         printAllTasks(taskManager);
     }
 
