@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class inMemoryTaskManager implements TaskManager {
+public class InMemoryTaskManager implements TaskManager {
 
     public int id;
 
@@ -18,7 +18,7 @@ public class inMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, SubTask> subTaskMaps;
     private final HistoryManager historyManager;
 
-    public inMemoryTaskManager(HistoryManager historyManager) {
+    public InMemoryTaskManager(HistoryManager historyManager) {
         taskMaps = new HashMap<>();
         epicMaps = new HashMap<>();
         subTaskMaps = new HashMap<>();
@@ -46,6 +46,9 @@ public class inMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearTask() {       // очистить весь список task
+        for (int id : taskMaps.keySet()) {
+            historyManager.remove(id);
+        }
         taskMaps.clear();
     }
 
@@ -58,6 +61,7 @@ public class inMemoryTaskManager implements TaskManager {
     @Override
     public void removeToIdTask(int id) {        // удаление task по id
         taskMaps.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
@@ -104,15 +108,21 @@ public class inMemoryTaskManager implements TaskManager {
             ArrayList<Integer> subTaskList = epicMaps.get(id).getSubTaskList();
             for (int subTask : subTaskList) {
                 subTaskMaps.remove(subTask);
+                historyManager.remove(subTask);
             }
         }
         epicMaps.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
     public void clearEpic() {           // очиска списка epic
-        epicMaps.clear();
         clearSubTask();
+        for (int id : epicMaps.keySet()) {
+            historyManager.remove(id);
+        }
+        epicMaps.clear();
+
     }
 
     //метод subtask
@@ -138,6 +148,9 @@ public class inMemoryTaskManager implements TaskManager {
             epics.clearListSubTask();
             calculateStatusEpic(epics.getId());
         }
+        for (int id : subTaskMaps.keySet()) {
+            historyManager.remove(id);
+        }
         subTaskMaps.clear();
     }
 
@@ -153,6 +166,7 @@ public class inMemoryTaskManager implements TaskManager {
             int epicid = subTaskMaps.get(id).getEpicId();
             epicMaps.get(epicid).removeValueListSubTask(id);
             subTaskMaps.remove(id);
+            historyManager.remove(id);
             calculateStatusEpic(epicid);
         }
     }

@@ -1,4 +1,4 @@
-import managers.inMemoryTaskManager;
+import managers.InMemoryTaskManager;
 import managers.Managers;
 import tasks.Epic;
 import tasks.SubTask;
@@ -9,15 +9,17 @@ public class Main {
 
     public static void main(String[] args) {
 
-        inMemoryTaskManager taskManager = (inMemoryTaskManager) Managers.getDefault();
+        InMemoryTaskManager taskManager = (InMemoryTaskManager) Managers.getDefault();
         Task task1 = new Task("задача_1", "описание задачи_1");
         Task task2 = new Task("задача_2", "описание задачи_2");
         taskManager.newTack(task1);
         taskManager.newTack(task2);
         Epic epic1 = new Epic("эпик_1", "описание эпик_1");
         Epic epic2 = new Epic("эпик_2", "описание эпик_2");
+        Epic epic3 = new Epic("эпик_3", "описание эпик_3");
         taskManager.newEpic(epic1);
         taskManager.newEpic(epic2);
+        taskManager.newEpic(epic3);
         SubTask subTask1 = new SubTask("подзадача_1_эпик_1", "описание подзадачи", 3);
         SubTask subTask2 = new SubTask("подзадача_2_эпик_1", "описание подзадачи", 3);
         SubTask subTask3 = new SubTask("подзадача_1_эпик_2", "описание подзадачи", 4);
@@ -36,6 +38,16 @@ public class Main {
         System.out.println(taskManager.getToIdSubTask(7));
         printAllTasks(taskManager);
 
+        System.out.println("______________ задача по id");
+        System.out.println(taskManager.getToIdTask(2));
+        System.out.println("______________ эпик по id");
+        System.out.println(taskManager.getToIdEpic(5));
+        System.out.println("______________список подзадач эпика по id");
+        System.out.println(taskManager.getToIdSubtaskInEpic(3));
+        System.out.println("______________ подзадача по id");
+        System.out.println(taskManager.getToIdSubTask(8));
+        printAllTasks(taskManager);
+
         System.out.println("______________вывод обновленого статуса списка задач по id");
         int valueId = 1;
         Task updateTask1 = taskManager.getToIdTask(valueId);
@@ -48,9 +60,14 @@ public class Main {
         System.out.println("______________ задача по id");
         System.out.println(taskManager.getToIdTask(1));
         printAllTasks(taskManager);
+
+        System.out.println("______________ удаление задачи и эпика");
+        taskManager.removeToIdEpic(3);
+        taskManager.removeToIdTask(1);
+        printAllTasks(taskManager);
     }
 
-    private static void printAllTasks(inMemoryTaskManager manager) {
+    private static void printAllTasks(InMemoryTaskManager manager) {
         System.out.println("Задачи:");
         for (Task task : manager.getTasks()) {
             System.out.println(task);
