@@ -113,7 +113,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    protected Task FromString(String value) {
+    protected Task fromString(String value) {
         int epicId = 0;
         String[] element = value.split(",");
         int id = Integer.parseInt(element[0]);
@@ -149,7 +149,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     continue;
                 else {
                     Task task;
-                    task = fileBackedTaskManager.FromString(line);
+                    task = fileBackedTaskManager.fromString(line);
                     if (task.getType() == Type.EPIC)
                         fileBackedTaskManager.newEpic((Epic) task);
                     else if (task.getType() == Type.SUBTUSK) {
