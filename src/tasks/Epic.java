@@ -13,13 +13,13 @@ public class Epic extends Task {
         super(name, description);
         this.status = Status.NEW;
         this.listSubTaskId = new ArrayList<>();
-        this.type= Type.EPIC;
+        this.type = Type.EPIC;
     }
 
-    public Epic (int id, Type type, String name, Status status, String description){
-        super(id,type, name, status, description);
+    public Epic(int id, Type type, String name, Status status, String description) {
+        super(id, type, name, status, description);
         this.listSubTaskId = new ArrayList<>();
-        }
+    }
 
     public void setListSubTask(int id) {
         listSubTaskId.add(id);
@@ -38,11 +38,10 @@ public class Epic extends Task {
     }
 
 
-
     @Override
     public String toString() {
         return "Epic{" +
-                "type='" + type +'\''+
+                "type='" + type + '\'' +
                 ", name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", id=" + getId() +
