@@ -1,7 +1,7 @@
 package managers;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
@@ -28,25 +28,26 @@ public class InMemoryHistoryManagerTest {
         fillTaskManager();
         taskManager.getToIdTask(1);
         List<Task> historyList = taskManager.getHistory();
-        Assert.assertNotNull("После просмотра задач история не должна быть пустой", historyList);
-        Assert.assertEquals("После просмотра задач история не должна быть пустой, 1 элемент", 1,
-                historyList.size());
+        Assertions.assertNotNull(historyList, "После просмотра задач история не должна быть пустой");
+        Assertions.assertEquals(1, historyList.size(),
+                "После просмотра задач история не должна быть пустой, 1 элемент");
         taskManager.getToIdTask(10);
-        Assert.assertEquals("при запросе задачи с несуществующим id не должна добавлятся в историю", 1,
-                historyList.size());
+        Assertions.assertEquals(1, historyList.size(),
+                "при запросе задачи с несуществующим id не должна добавлятся в историю");
         taskManager.getToIdEpic(2);
-        Assert.assertEquals("Задача не добавилась в историю", 2, taskManager.getHistory().size());
+        Assertions.assertEquals(2, taskManager.getHistory().size(),
+                "Задача не добавилась в историю");
     }
 
     @Test
     public void isNullHistoryList() {
-        Assert.assertTrue("список History не пустой", historyManager.getHistory().isEmpty());
+        Assertions.assertTrue(historyManager.getHistory().isEmpty(), "список History не пустой");
     }
 
     @Test
     public void isNullAddNullHistoryList() {
         historyManager.add(null);
-        Assert.assertTrue("список History не пустой", historyManager.getHistory().isEmpty());
+        Assertions.assertTrue(historyManager.getHistory().isEmpty(), "список History не пустой");
     }
 
     @Test
@@ -55,12 +56,12 @@ public class InMemoryHistoryManagerTest {
         taskManager.getToIdTask(1);
         taskManager.getToIdEpic(1);
         taskManager.getToIdEpic(2);
-        Assert.assertEquals("History должен соотвествовать просмотру", List.of(task, epic),
-                historyManager.getHistory());
+        Assertions.assertEquals(List.of(task, epic), historyManager.getHistory(),
+                "History должен соотвествовать просмотру");
         taskManager.getToIdEpic(2);
         taskManager.getToIdTask(1);
-        Assert.assertEquals("History порядок не соответсвует вызову", List.of(epic, task),
-                historyManager.getHistory());
+        Assertions.assertEquals(List.of(epic, task), historyManager.getHistory(),
+                "History порядок не соответсвует вызову");
     }
 
     @Test
@@ -71,17 +72,17 @@ public class InMemoryHistoryManagerTest {
         taskManager.getToIdSubTask(3);
         taskManager.getToIdTask(4);
         historyManager.remove(44);
-        Assert.assertEquals("при удаление нусещ. id History изменился", 4,
-                historyManager.getHistory().size());
+        Assertions.assertEquals(4, historyManager.getHistory().size(),
+                "при удаление нусещ. id History изменился");
         historyManager.remove(4);
-        Assert.assertEquals("при удаление в середине History порядок не должен менятся",
-                List.of(task, epic, subTask), historyManager.getHistory());
+        Assertions.assertEquals(List.of(task, epic, subTask), historyManager.getHistory(),
+                "при удаление в середине History порядок не должен менятся");
         historyManager.remove(3);
-        Assert.assertEquals("при удаление последнего History порядок не должен менятся", List.of(task, epic),
-                historyManager.getHistory());
+        Assertions.assertEquals(List.of(task, epic), historyManager.getHistory(),
+                "при удаление последнего History порядок не должен менятся");
         historyManager.remove(1);
-        Assert.assertEquals("при удаление первого History порядок не должен менятся", List.of(epic),
-                historyManager.getHistory());
+        Assertions.assertEquals(List.of(epic), historyManager.getHistory(),
+                "при удаление первого History порядок не должен менятся");
     }
 }
 

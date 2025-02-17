@@ -8,6 +8,8 @@ import util.Status;
 import util.Type;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,6 +19,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public FileBackedTaskManager(HistoryManager historyManager, String file) {
         super(historyManager);
+        if (!Files.exists(Path.of((file)))) {
+            try {
+                Files.createFile(Path.of(file));
+            } catch (IOException e) {
+                throw new ManagerSaveException("Ошибка создания файла");
+            }
+        }
         this.file = new File(file);
     }
 
@@ -138,14 +147,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(Managers.getDefaultHistory(),
-                file.getName());
+                String.valueOf(file));
         try (FileReader fileReader = new FileReader(file)) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while (bufferedReader.ready()) {
                 String line = bufferedReader.readLine();
-                if (line.equals(""))
-                    continue;
-                if (line.contains("id"))
+                if (line.equals("") || line.contains("id"))
                     continue;
                 else {
                     Task task;

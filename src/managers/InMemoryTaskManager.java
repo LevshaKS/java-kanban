@@ -19,7 +19,6 @@ public class InMemoryTaskManager implements TaskManager {
     private final HistoryManager historyManager;
 
 
-
     public InMemoryTaskManager(HistoryManager historyManager) {
         taskMaps = new HashMap<>();
         epicMaps = new HashMap<>();
