@@ -1,8 +1,8 @@
 package managers;
 
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
@@ -18,45 +18,45 @@ public class InMemoryTaskManagerTest {
     public void NewManagers() {
         TaskManager taskManager1 = Managers.getDefault();
         TaskManager taskManager2 = Managers.getDefault();
-        Assert.assertNotNull("Не создался новый элемент", taskManager1);
-        Assert.assertNotNull("Не создался новый элемент", taskManager2);
+        Assertions.assertNotNull(taskManager1, "Не создался новый элемент");
+        Assertions.assertNotNull(taskManager2, "Не создался новый элемент");
         Task task = new Task("test add task", "add task descriprion");
         taskManager1.newTack(task);
         taskManager2.newTack(task);
-        Assert.assertNotEquals("задачи в разных менеджерах должны быть не равны",
-                taskManager1.getToIdTask(1), taskManager1.getToIdTask(2));
+        Assertions.assertNotEquals(taskManager1.getToIdTask(1), taskManager1.getToIdTask(2),
+                "задачи в разных менеджерах должны быть не равны");
     }
 
     @Test
     public void addNewTask() {
         Task task = new Task("test add task", "add task descriprion");
         taskManager.newTack(task);
-        Assert.assertEquals("Задачи не совпали", task, taskManager.getToIdTask(1));
-        Assert.assertNotNull("Задача не записалась", taskManager.getToIdTask(1));
+        Assertions.assertEquals(task, taskManager.getToIdTask(1), "Задачи не совпали");
+        Assertions.assertNotNull(taskManager.getToIdTask(1), "Задача не записалась");
         List<Task> tasks = taskManager.getTasks();
-        Assert.assertNotNull("Список задач не возращается", tasks);
-        Assert.assertEquals("Неверное количество задач", 1, tasks.size());
-        Assert.assertEquals("Не совпадает задача с задачей в списке", task, tasks.get(0));
+        Assertions.assertNotNull(tasks, "Список задач не возращается");
+        Assertions.assertEquals(1, tasks.size(), "Неверное количество задач");
+        Assertions.assertEquals(task, tasks.get(0), "Не совпадает задача с задачей в списке");
         taskManager.removeToIdTask(1);
         tasks = taskManager.getTasks();
-        Assert.assertEquals("Не совпадает список после удаления", 0, tasks.size());
-        Assert.assertTrue("при удаление необходимо удалить из истории ", taskManager.getHistory().isEmpty());
+        Assertions.assertEquals(0, tasks.size(), "Не совпадает список после удаления");
+        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "при удаление необходимо удалить из истории ");
     }
 
     @Test
     public void addNewEpic() {
         Epic epic = new Epic("test add epic", "add epic descriprion");
         taskManager.newEpic(epic);
-        Assert.assertEquals("Эпик не совпали", epic, taskManager.getToIdEpic(1));
-        Assert.assertNotNull("Эпик не записался", taskManager.getToIdEpic(1));
+        Assertions.assertEquals(epic, taskManager.getToIdEpic(1), "Эпик не совпали");
+        Assertions.assertNotNull(taskManager.getToIdEpic(1), "Эпик не записался");
         List<Epic> epics = taskManager.getEpic();
-        Assert.assertNotNull("Список эпиков не возращается", epics);
-        Assert.assertEquals("Неверное количество эпиков", 1, epics.size());
-        Assert.assertEquals("Не совпадает эпик с эпиком в списке", epic, epics.get(0));
+        Assertions.assertNotNull(epics, "Список эпиков не возращается");
+        Assertions.assertEquals(1, epics.size(), "Неверное количество эпиков");
+        Assertions.assertEquals(epic, epics.get(0), "Не совпадает эпик с эпиком в списке");
         taskManager.removeToIdEpic(1);
         epics = taskManager.getEpic();
-        Assert.assertEquals("Не совпадает эпик после удаления", 0, epics.size());
-        Assert.assertTrue("при удаление необходимо удалить из истории ", taskManager.getHistory().isEmpty());
+        Assertions.assertEquals(0, epics.size(), "Не совпадает эпик после удаления");
+        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "при удаление необходимо удалить из истории ");
     }
 
     @Test
@@ -65,20 +65,20 @@ public class InMemoryTaskManagerTest {
         taskManager.newEpic(epic);
         SubTask subTask = new SubTask("test add suptask", "add suptask descriprion", 1);
         taskManager.newSubTask(subTask);
-        Assert.assertEquals("Подзадачи не совпали", subTask, taskManager.getToIdSubTask(2));
-        Assert.assertNotNull("Подзадача не записалась", taskManager.getToIdSubTask(2));
+        Assertions.assertEquals(subTask, taskManager.getToIdSubTask(2), "Подзадачи не совпали");
+        Assertions.assertNotNull(taskManager.getToIdSubTask(2), "Подзадача не записалась");
         List<SubTask> subTasks = taskManager.getSubTask();
-        Assert.assertNotNull("Список подзадач не возращается", subTasks);
-        Assert.assertEquals("Неверное количество подзадач", 1, subTasks.size());
-        Assert.assertEquals("Не совпадает подзадача с подзадачей в списке", subTask, subTasks.get(0));
-        Assert.assertEquals("Не совпадает возращаемая подзадача по id эпика", subTasks,
-                taskManager.getToIdSubtaskInEpic(1));
+        Assertions.assertNotNull(subTasks, "Список подзадач не возращается");
+        Assertions.assertEquals(1, subTasks.size(), "Неверное количество подзадач");
+        Assertions.assertEquals(subTask, subTasks.get(0), "Не совпадает подзадача с подзадачей в списке");
+        Assertions.assertEquals(subTasks, taskManager.getToIdSubtaskInEpic(1),
+                "Не совпадает возращаемая подзадача по id эпика");
         taskManager.removeToIdSubTask(2);
         subTasks = taskManager.getSubTask();
-        Assert.assertEquals("Неверное количество подзадач", 0, subTasks.size());
-        Assert.assertEquals("Из списка подзадач в эпике не удалилась подзадача", 0,
-                taskManager.getToIdSubtaskInEpic(1).size());
-        Assert.assertTrue("при удаление необходимо удалить из истории ", taskManager.getHistory().isEmpty());
+        Assertions.assertEquals(0, subTasks.size(), "Неверное количество подзадач");
+        Assertions.assertEquals(0, taskManager.getToIdSubtaskInEpic(1).size(),
+                "Из списка подзадач в эпике не удалилась подзадача");
+        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "при удаление необходимо удалить из истории ");
     }
 
     @Test
@@ -90,8 +90,8 @@ public class InMemoryTaskManagerTest {
         taskManager.getToIdTask(2);
         taskManager.getToIdTask(3);
         taskManager.clearTask();
-        Assert.assertTrue("список задач не пустой", taskManager.getTasks().isEmpty());
-        Assert.assertTrue("список в History не пустой", taskManager.getHistory().isEmpty());
+        Assertions.assertTrue(taskManager.getTasks().isEmpty(), "список задач не пустой");
+        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "список в History не пустой");
     }
 
     @Test
@@ -105,8 +105,8 @@ public class InMemoryTaskManagerTest {
         taskManager.getToIdSubTask(4);
         taskManager.getToIdSubTask(5);
         taskManager.clearSubTask();
-        Assert.assertTrue("Список подзадач не пустой", taskManager.getSubTask().isEmpty());
-        Assert.assertTrue("список в History не пустой", taskManager.getHistory().isEmpty());
+        Assertions.assertTrue(taskManager.getSubTask().isEmpty(), "Список подзадач не пустой");
+        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "список в History не пустой");
     }
 
     @Test
@@ -122,9 +122,9 @@ public class InMemoryTaskManagerTest {
         taskManager.getToIdSubTask(4);
         taskManager.getToIdSubTask(5);
         taskManager.clearEpic();
-        Assert.assertTrue("Список епиков не пустой", taskManager.getEpic().isEmpty());
-        Assert.assertTrue("Список подзадач не пустой", taskManager.getSubTask().isEmpty());
-        Assert.assertTrue("список в History не пустой", taskManager.getHistory().isEmpty());
+        Assertions.assertTrue(taskManager.getEpic().isEmpty(), "Список епиков не пустой");
+        Assertions.assertTrue(taskManager.getSubTask().isEmpty(), "Список подзадач не пустой");
+        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "список в History не пустой");
     }
 
 }
