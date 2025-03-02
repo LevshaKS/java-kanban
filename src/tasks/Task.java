@@ -1,6 +1,7 @@
 package tasks;
 
 import util.Status;
+import util.Type;
 
 import java.util.Objects;
 
@@ -10,17 +11,30 @@ public class Task {
     protected int id;
     protected Status status;
 
+    protected Type type;
+
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
+        this.type = Type.TASK;
     }
+
 
     public Task(Task task) {
         this.name = task.getName();
         this.description = task.getDescription();
         this.status = task.getStatus();
         this.id = task.getId();
+        this.type = task.getType();
+    }
+
+    public Task(int id, Type type, String name, Status status, String description) {
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.status = status;
+        this.description = description;
     }
 
     public String getName() {
@@ -43,15 +57,23 @@ public class Task {
         return status;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }
 
+    public String toStringInFile() {
+        return String.format("%s,%s,%s,%s,%s", id, type, name, status, description);
+    }
 
     @Override
     public String toString() {
         return "Task{" +
-                "name='" + name + '\'' +
+                "type='" + type + '\'' +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
@@ -71,6 +93,8 @@ public class Task {
     public int hashCode() {
         return Objects.hash(name, description, status);
     }
+
+
 }
 
 
