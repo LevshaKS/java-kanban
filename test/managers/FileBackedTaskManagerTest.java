@@ -47,8 +47,10 @@ public class FileBackedTaskManagerTest extends TaskManagerTest {
         Assertions.assertEquals(0, taskList.size(), "список не пустой");
         taskManager = FileBackedTaskManager.loadFromFile(file);
         taskList = taskManager.getTasks();
+        taskManager.newEpic(epic2);
         taskList.addAll(taskManager.getEpic());
-        Assertions.assertEquals(2, taskList.size(), "список не соответсвует");
+        System.out.println(taskList);
+        Assertions.assertEquals(3, taskList.size(), "список не соответсвует");
         Assertions.assertEquals(task1, taskManager.getToIdTask(1), "список загруженных задач не соотвествует заполненым");
     }
 }
