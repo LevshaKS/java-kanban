@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tasks.Task;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -47,7 +50,10 @@ public class FileBackedTaskManagerTest extends TaskManagerTest {
         Assertions.assertEquals(0, taskList.size(), "список не пустой");
         taskManager = FileBackedTaskManager.loadFromFile(file);
         taskManager.newEpic(epic2);
+        taskList.addAll(taskManager.getTasks());
         taskList.addAll(taskManager.getEpic());
+        System.out.println(taskList);
+         Assertions.assertEquals(3, taskList.size(), "список не соответсвует");
         Assertions.assertEquals(epic2, taskManager.getToIdEpic(3), "список загруженных задач не соотвествует заполненым");
     }
 }
