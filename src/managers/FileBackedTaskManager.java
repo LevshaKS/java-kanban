@@ -10,12 +10,16 @@ import util.Type;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
 
     public FileBackedTaskManager(HistoryManager historyManager, String file) {
         super(historyManager);
@@ -130,16 +134,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String name = element[2];
         Status status = Status.valueOf(element[3]);
         String description = element[4];
-        if (element.length == 6) {
-            epicId = Integer.parseInt(element[5]);
+        LocalDateTime startTime = LocalDateTime.parse(element[5], formatter);
+        long duration = Long.parseLong(element[6]);
+        if (element.length == 8) {
+            epicId = Integer.parseInt(element[7]);
         }
         switch (type) {
             case TASK:
-                return new Task(id, type, name, status, description);
+                return new Task(id, type, name, status, description, startTime, duration);
             case EPIC:
-                return new Epic(id, type, name, status, description);
+                return new Epic(id, type, name, status, description, startTime, duration);
             case SUBTUSK:
-                return new SubTask(id, type, name, status, description, epicId);
+                return new SubTask(id, type, name, status, description, startTime, duration, epicId);
             default:
                 return null;
         }

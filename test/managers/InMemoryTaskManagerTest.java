@@ -1,21 +1,15 @@
 package managers;
 
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
-import tasks.SubTask;
 import tasks.Task;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
-public class InMemoryTaskManagerTest {
-
-    managers.InMemoryTaskManager taskManager = (managers.InMemoryTaskManager) Managers.getDefault();
-
+public class InMemoryTaskManagerTest extends TaskManagerTest {
 
     @Test
-    public void NewManagers() {
+    void NewManagers() {
         TaskManager taskManager1 = Managers.getDefault();
         TaskManager taskManager2 = Managers.getDefault();
         Assertions.assertNotNull(taskManager1, "Не создался новый элемент");
@@ -28,103 +22,76 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void addNewTask() {
-        Task task = new Task("test add task", "add task descriprion");
-        taskManager.newTack(task);
-        Assertions.assertEquals(task, taskManager.getToIdTask(1), "Задачи не совпали");
-        Assertions.assertNotNull(taskManager.getToIdTask(1), "Задача не записалась");
-        List<Task> tasks = taskManager.getTasks();
-        Assertions.assertNotNull(tasks, "Список задач не возращается");
-        Assertions.assertEquals(1, tasks.size(), "Неверное количество задач");
-        Assertions.assertEquals(task, tasks.get(0), "Не совпадает задача с задачей в списке");
-        taskManager.removeToIdTask(1);
-        tasks = taskManager.getTasks();
-        Assertions.assertEquals(0, tasks.size(), "Не совпадает список после удаления");
-        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "при удаление необходимо удалить из истории ");
+    void addPrioritizedTasks() {
+        Assertions.assertTrue(taskManager.getPrioritizedTasks().isEmpty(), "Список не пустой");
+        taskManager.newTack(task1);
+        taskManager.newTack(task2);
+        Assertions.assertEquals(2, taskManager.getPrioritizedTasks().size(), "количество записей не совпадает");
     }
 
     @Test
-    public void addNewEpic() {
-        Epic epic = new Epic("test add epic", "add epic descriprion");
-        taskManager.newEpic(epic);
-        Assertions.assertEquals(epic, taskManager.getToIdEpic(1), "Эпик не совпали");
-        Assertions.assertNotNull(taskManager.getToIdEpic(1), "Эпик не записался");
-        List<Epic> epics = taskManager.getEpic();
-        Assertions.assertNotNull(epics, "Список эпиков не возращается");
-        Assertions.assertEquals(1, epics.size(), "Неверное количество эпиков");
-        Assertions.assertEquals(epic, epics.get(0), "Не совпадает эпик с эпиком в списке");
-        taskManager.removeToIdEpic(1);
-        epics = taskManager.getEpic();
-        Assertions.assertEquals(0, epics.size(), "Не совпадает эпик после удаления");
-        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "при удаление необходимо удалить из истории ");
+    void removePrioritizedTasks() {
+        taskManager.newTack(task1);
+        taskManager.newTack(task2);
+        Assertions.assertEquals(2, taskManager.getPrioritizedTasks().size(), "запись не добавилась");
+        taskManager.removeToIdTask(2);
+        Assertions.assertEquals(1, taskManager.getPrioritizedTasks().size(), "запись не удалилась");
     }
 
     @Test
-    public void addNewSupTask() {
-        Epic epic = new Epic("test add suptask in epic", "add suptask in epic descriprion");
-        taskManager.newEpic(epic);
-        SubTask subTask = new SubTask("test add suptask", "add suptask descriprion", 1);
-        taskManager.newSubTask(subTask);
-        Assertions.assertEquals(subTask, taskManager.getToIdSubTask(2), "Подзадачи не совпали");
-        Assertions.assertNotNull(taskManager.getToIdSubTask(2), "Подзадача не записалась");
-        List<SubTask> subTasks = taskManager.getSubTask();
-        Assertions.assertNotNull(subTasks, "Список подзадач не возращается");
-        Assertions.assertEquals(1, subTasks.size(), "Неверное количество подзадач");
-        Assertions.assertEquals(subTask, subTasks.get(0), "Не совпадает подзадача с подзадачей в списке");
-        Assertions.assertEquals(subTasks, taskManager.getToIdSubtaskInEpic(1),
-                "Не совпадает возращаемая подзадача по id эпика");
-        taskManager.removeToIdSubTask(2);
-        subTasks = taskManager.getSubTask();
-        Assertions.assertEquals(0, subTasks.size(), "Неверное количество подзадач");
-        Assertions.assertEquals(0, taskManager.getToIdSubtaskInEpic(1).size(),
-                "Из списка подзадач в эпике не удалилась подзадача");
-        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "при удаление необходимо удалить из истории ");
+    void intersectionStartPrioritizedTasks() {
+        task1.setStartTime(LocalDateTime.now());
+        task1.setDuration(25);
+        task2.setStartTime(LocalDateTime.now().plusMinutes(20));
+        task2.setDuration(25);
+        taskManager.newTack(task1);
+        taskManager.newTack(task2);
+        Assertions.assertEquals(1, taskManager.getPrioritizedTasks().size(), "пересечения в начало, запись добавилась");
     }
 
     @Test
-    public void clearTask() {
-        taskManager.newTack(new Task("test add task1", "add task1 descriprion"));
-        taskManager.newTack(new Task("test add task2", "add task2 descriprion"));
-        taskManager.newTack(new Task("test add task3", "add task3 descriprion"));
-        taskManager.getToIdTask(1);
-        taskManager.getToIdTask(2);
-        taskManager.getToIdTask(3);
-        taskManager.clearTask();
-        Assertions.assertTrue(taskManager.getTasks().isEmpty(), "список задач не пустой");
-        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "список в History не пустой");
+    void intersectionEndPrioritizedTasks() {
+        task1.setStartTime(LocalDateTime.now());
+        task1.setDuration(25);
+        task2.setStartTime(LocalDateTime.now().minusMinutes(24));
+        task2.setDuration(25);
+        taskManager.newTack(task1);
+        taskManager.newTack(task2);
+        Assertions.assertEquals(1, taskManager.getPrioritizedTasks().size(), "пересечения в конце, запись добавилась");
     }
 
     @Test
-    public void clearSubTask() {
-        taskManager.newEpic(new Epic("test add epic1", "add epic1 descriprion"));
-        taskManager.newEpic(new Epic("test add epic2", "add epic2 descriprion"));
-        taskManager.newSubTask(new SubTask("test add subtask1", "add subtask1 descriprion", 1));
-        taskManager.newSubTask(new SubTask("test add subtask2", "add subtask2 descriprion", 1));
-        taskManager.newSubTask(new SubTask("test add subtask3", "add subtask3 descriprion", 2));
-        taskManager.getToIdSubTask(3);
-        taskManager.getToIdSubTask(4);
-        taskManager.getToIdSubTask(5);
-        taskManager.clearSubTask();
-        Assertions.assertTrue(taskManager.getSubTask().isEmpty(), "Список подзадач не пустой");
-        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "список в History не пустой");
+    void insidePrioritizedTasks() {
+        task1.setStartTime(LocalDateTime.now());
+        task1.setDuration(25);
+        task2.setStartTime(LocalDateTime.now().plusMinutes(5));
+        task2.setDuration(10);
+        taskManager.newTack(task1);
+        taskManager.newTack(task2);
+        Assertions.assertEquals(1, taskManager.getPrioritizedTasks().size(), "внутри времени задачи 1, запись добавилась");
     }
 
     @Test
-    public void clearEpic() {
-        taskManager.newEpic(new Epic("test add epic1", "add epic1 descriprion"));
-        taskManager.newEpic(new Epic("test add epic2", "add epic2 descriprion"));
-        taskManager.newSubTask(new SubTask("test add subtask1", "add subtask1 descriprion", 1));
-        taskManager.newSubTask(new SubTask("test add subtask2", "add subtask2 descriprion", 1));
-        taskManager.newSubTask(new SubTask("test add subtask3", "add subtask3 descriprion", 2));
-        taskManager.getToIdEpic(1);
-        taskManager.getToIdEpic(2);
-        taskManager.getToIdSubTask(3);
-        taskManager.getToIdSubTask(4);
-        taskManager.getToIdSubTask(5);
-        taskManager.clearEpic();
-        Assertions.assertTrue(taskManager.getEpic().isEmpty(), "Список епиков не пустой");
-        Assertions.assertTrue(taskManager.getSubTask().isEmpty(), "Список подзадач не пустой");
-        Assertions.assertTrue(taskManager.getHistory().isEmpty(), "список в History не пустой");
+    void outsidePrioritizedTasks() {
+        task1.setStartTime(LocalDateTime.now());
+        task1.setDuration(25);
+        task2.setStartTime(LocalDateTime.now().minusMinutes(5));
+        task2.setDuration(40);
+        taskManager.newTack(task1);
+        taskManager.newTack(task2);
+        Assertions.assertEquals(1, taskManager.getPrioritizedTasks().size(), "Обволакивание времени задачи 1, запись добавилась");
+    }
+
+    @Test
+    void orderPrioritizedTasks() {
+        task1.setStartTime(LocalDateTime.now());
+        task2.setStartTime(LocalDateTime.now().plusHours(1));
+        taskManager.newTack(task1);
+        taskManager.newTack(task2);
+        Assertions.assertEquals(task2, taskManager.getPrioritizedTasks().get(1), "порядок записей не соответствует");
+        task2.setStartTime(LocalDateTime.now().minusHours(2));
+        taskManager.updateTask(2, task2);
+        Assertions.assertEquals(task2, taskManager.getPrioritizedTasks().get(0), "порядок записей не соответствует");
     }
 
 }
