@@ -53,6 +53,6 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    public List<Task> getPrioritizedTasks();
+    List<Task> getPrioritizedTasks();
 
 }
