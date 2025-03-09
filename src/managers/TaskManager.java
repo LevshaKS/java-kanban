@@ -15,7 +15,7 @@ public interface TaskManager {
 
     ArrayList<Task> getTasks();
 
-    void clearTask();
+    void clearTaskList();
 
     Task getToIdTask(int id);
 
@@ -34,14 +34,14 @@ public interface TaskManager {
 
     void removeToIdEpic(int id);
 
-    void clearEpic();
+    void clearEpicList();
 
     //метод subtask
     ArrayList<SubTask> getSubTask();
 
     void newSubTask(SubTask subTask);
 
-    void clearSubTask();
+    void clearSubTaskList();
 
     SubTask getToIdSubTask(int id);
 
@@ -53,4 +53,6 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    }
+    List<Task> getPrioritizedTasks();
+
+}
