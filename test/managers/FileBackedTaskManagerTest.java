@@ -3,7 +3,6 @@ package managers;
 import exceptions.ManagerSaveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import tasks.Task;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,8 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FileBackedTaskManagerTest extends TaskManagerTest {
     String home = System.getProperty("user.dir") + "\\resources\\";
@@ -44,7 +41,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest {
     }
 
     //закоментил, не знаю почему githab  не подхвыатывает список из файла, сам файл загружен с проектом
-    /*@Test
+  /* @Test
     void loadFile() {
         File file = new File(file2);
         List<Task> taskList = new ArrayList<>(taskManager.getTasks());

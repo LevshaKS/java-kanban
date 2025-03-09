@@ -74,7 +74,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.newTack(task2);
         List<Task> tasks = taskManager.getTasks();
         Assertions.assertEquals(2, tasks.size(), "Не совпадает список");
-        taskManager.clearTask();
+        taskManager.clearTaskList();
         tasks = taskManager.getTasks();
         Assertions.assertEquals(0, tasks.size(), "Не совпадает список после удаления");
     }
@@ -143,7 +143,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.newSubTask(subTask2);
         List<SubTask> subTask = taskManager.getSubTask();
         Assertions.assertEquals(2, subTask.size(), "Неверное количество subtask");
-        taskManager.clearEpic();
+        taskManager.clearEpicList();
         epics = taskManager.getEpic();
         Assertions.assertEquals(0, epics.size(), "Неверное количество эпиков");
         subTask = taskManager.getSubTask();
@@ -183,7 +183,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.newSubTask(subTask3);
         List<SubTask> subTask = taskManager.getSubTask();
         Assertions.assertEquals(3, subTask.size(), "Неверное количество subtask");
-        taskManager.clearSubTask();
+        taskManager.clearSubTaskList();
         subTask = taskManager.getSubTask();
         Assertions.assertEquals(0, subTask.size(), "Неверное количество subtask");
     }

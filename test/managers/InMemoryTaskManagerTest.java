@@ -45,8 +45,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest {
         task2.setStartTime(LocalDateTime.now().plusMinutes(20));
         task2.setDuration(25);
         taskManager.newTack(task1);
-        taskManager.newTack(task2);
-        Assertions.assertEquals(1, taskManager.getPrioritizedTasks().size(), "пересечения в начало, запись добавилась");
+        Assertions.assertThrows(RuntimeException.class, () -> taskManager.newTack(task2), "пересечение не прошло");
     }
 
     @Test
@@ -56,8 +55,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest {
         task2.setStartTime(LocalDateTime.now().minusMinutes(24));
         task2.setDuration(25);
         taskManager.newTack(task1);
-        taskManager.newTack(task2);
-        Assertions.assertEquals(1, taskManager.getPrioritizedTasks().size(), "пересечения в конце, запись добавилась");
+        Assertions.assertThrows(RuntimeException.class, () -> taskManager.newTack(task2), "пересечение не прошло");
     }
 
     @Test
@@ -67,8 +65,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest {
         task2.setStartTime(LocalDateTime.now().plusMinutes(5));
         task2.setDuration(10);
         taskManager.newTack(task1);
-        taskManager.newTack(task2);
-        Assertions.assertEquals(1, taskManager.getPrioritizedTasks().size(), "внутри времени задачи 1, запись добавилась");
+        Assertions.assertThrows(RuntimeException.class, () -> taskManager.newTack(task2), "пересечение не прошло");
     }
 
     @Test
@@ -78,8 +75,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest {
         task2.setStartTime(LocalDateTime.now().minusMinutes(5));
         task2.setDuration(40);
         taskManager.newTack(task1);
-        taskManager.newTack(task2);
-        Assertions.assertEquals(1, taskManager.getPrioritizedTasks().size(), "Обволакивание времени задачи 1, запись добавилась");
+        Assertions.assertThrows(RuntimeException.class, () -> taskManager.newTack(task2), "пересечение не прошло");
     }
 
     @Test

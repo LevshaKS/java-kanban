@@ -23,7 +23,6 @@ public class InMemoryHistoryManagerTest extends TaskManagerTest {
         Assertions.assertEquals(1, historyList.size(),
                 "при запросе задачи с несуществующим id не должна добавлятся в историю");
         taskManager.getToIdEpic(3);
-        System.out.println(historyList);
         Assertions.assertEquals(2, taskManager.getHistory().size(),
                 "Задача не добавилась в историю");
     }
