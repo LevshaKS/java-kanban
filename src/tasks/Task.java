@@ -3,6 +3,8 @@ package tasks;
 import util.Status;
 import util.Type;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -10,8 +12,13 @@ public class Task {
     protected String description;
     protected int id;
     protected Status status;
-
     protected Type type;
+    protected LocalDateTime startTime;
+
+    protected long duration;  // minuts
+
+    protected final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+
 
     public Task(String name, String description) {
         this.name = name;
@@ -36,6 +43,27 @@ public class Task {
         this.status = status;
         this.description = description;
     }
+
+    public Task(String name, String description, LocalDateTime startTime, long duration) {
+
+        this.name = name;
+        this.status = Status.NEW;
+        this.description = description;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.type = Type.TASK;
+    }
+
+    public Task(int id, Type type, String name, Status status, String description, LocalDateTime startTime, long duration) {
+        this.id = id;
+        this.type = type;
+        this.name = name;
+        this.status = status;
+        this.description = description;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
 
     public String getName() {
         return name;
@@ -65,8 +93,29 @@ public class Task {
         this.status = status;
     }
 
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration);
+    }
+
     public String toStringInFile() {
-        return String.format("%s,%s,%s,%s,%s", id, type, name, status, description);
+        return String.format("%s,%s,%s,%s,%s,%s,%s", id, type, name, status, description, startTime.format(formatter), duration);
     }
 
     @Override
@@ -77,7 +126,8 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
-                '\'' +
+                ", startTime=" + startTime.format(formatter) +
+                ", duration=" + duration +
                 "}" + '\n';
     }
 
@@ -93,7 +143,6 @@ public class Task {
     public int hashCode() {
         return Objects.hash(name, description, status);
     }
-
 
 }
 
