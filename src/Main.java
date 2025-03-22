@@ -1,4 +1,4 @@
-import managers.FileBackedTaskManager;
+/* import managers.FileBackedTaskManager;
 import managers.InMemoryTaskManager;
 import managers.Managers;
 import tasks.Epic;
@@ -14,7 +14,7 @@ import static managers.FileBackedTaskManager.loadFromFile;
 
 public class Main {
 
-  /*  public static void main(String[] args) throws IOException {
+   public static void main(String[] args) throws IOException {
         String home = System.getProperty("user.dir");
         home += "\\resources\\";
 
@@ -90,5 +90,6 @@ public class Main {
         for (Task task : inMemoryTaskManager.getPrioritizedTasks()) {
             System.out.println(task);
         }
-    }*/
+    }
 }
+*/
