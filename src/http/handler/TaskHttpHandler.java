@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import exceptions.ManagerException;
-import http.HttpTaskServer;
 import managers.TaskManager;
 import tasks.Task;
 
@@ -19,7 +18,7 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
 
     public TaskHttpHandler(TaskManager manager) {
         this.manager = manager;
-        gson = HttpTaskServer.getGson();
+        gson = getGson();
     }
 
     public Integer getIdFromPath(String path) {
@@ -36,22 +35,25 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
         final String method = httpExchange.getRequestMethod();
         switch (method) {
             case ("GET"): {
-                if (idPath == null) {
-                    List<Task> tasks = manager.getTasks();
-                    String response = gson.toJson(tasks);
-                    sendText(httpExchange, response);
-                    System.out.println("возвращаем все таски");
-                    return;
-                }
-                Task task = manager.getToIdTask(idPath);
-                if (task != null) {
-                    String response = gson.toJson(task);
-                    sendText(httpExchange, response);
-                    System.out.println("возвращаем  таску " + idPath);
-                } else {
-                    sendNotFound(httpExchange);
-                    System.out.println("таска id=" + idPath + " нет");
-
+                if ((path.split("/").length > 3))
+                    sendMethodNotAllowed(httpExchange);
+                else {
+                    if (idPath == null) {
+                        List<Task> tasks = manager.getTasks();
+                        String response = gson.toJson(tasks);
+                        sendText(httpExchange, response);
+                        System.out.println("возвращаем все таски");
+                        return;
+                    }
+                    Task task = manager.getToIdTask(idPath);
+                    if (task != null) {
+                        String response = gson.toJson(task);
+                        sendText(httpExchange, response);
+                        System.out.println("возвращаем  таску " + idPath);
+                    } else {
+                        sendNotFound(httpExchange);
+                        System.out.println("таска id=" + idPath + " нет");
+                    }
                 }
                 break;
             }
@@ -67,12 +69,14 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
                     } else
                         try {
                             manager.newTack(task);
-                            System.out.println("Задача создана" + '\n' + gson.toJson(task));
+                            System.out.println("Задача создана");
                             sendOk(httpExchange);
                         } catch (ManagerException e) {
                             System.out.println("пересекается с существующими");
                             sendHasInteractions(httpExchange);
                         }
+                } else {
+                    sendMethodNotAllowed(httpExchange);
                 }
                 break;
             }
@@ -89,12 +93,11 @@ public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
                         sendText(httpExchange, "удалена задача id= " + idPath);
                     } else
                         sendNotFound(httpExchange);
-
                 }
                 break;
             }
             default:
-                sendNotFound(httpExchange);
+                sendBadRequest(httpExchange);
         }
     }
 }

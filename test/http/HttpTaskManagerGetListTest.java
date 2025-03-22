@@ -2,6 +2,7 @@ package http;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import http.handler.BaseHttpHandler;
 import managers.InMemoryHistoryManager;
 import managers.InMemoryTaskManager;
 import managers.TaskManager;
@@ -25,7 +26,7 @@ public class HttpTaskManagerGetListTest {
 
     TaskManager taskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
     HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
-    Gson gson = HttpTaskServer.getGson();
+    Gson gson = BaseHttpHandler.getGson();
 
     public HttpTaskManagerGetListTest() throws IOException {
     }

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import exceptions.ManagerException;
-import http.HttpTaskServer;
 import managers.TaskManager;
 import tasks.Epic;
 import tasks.SubTask;
@@ -19,7 +18,7 @@ public class EpicTaskHandler extends BaseHttpHandler implements HttpHandler {
 
     public EpicTaskHandler(TaskManager manager) {
         this.manager = manager;
-        gson = HttpTaskServer.getGson();
+        gson = getGson();
     }
 
     public Integer getIdFromPath(String path) {
@@ -36,33 +35,39 @@ public class EpicTaskHandler extends BaseHttpHandler implements HttpHandler {
         final String method = httpExchange.getRequestMethod();
         switch (method) {
             case ("GET"): {
-                if (idPath == null) {
-                    List<Epic> epics = manager.getEpic();
-                    String response = gson.toJson(epics);
-                    sendText(httpExchange, response);
-                    System.out.println("возвращаем все епики");
-                    return;
-                }
-                Epic epic = manager.getToIdEpic(idPath);
-                if (epic != null) {
-                    if ((path.split("/").length > 3) && (path.split("/")[3].equals("subtasks"))) {
-                        List<SubTask> subTaskList = manager.getToIdSubtaskInEpic(idPath);
-                        String response = gson.toJson(subTaskList);
+                if ((path.split("/").length > 3))
+                    sendMethodNotAllowed(httpExchange);
+                else {
+                    if (idPath == null) {
+                        List<Epic> epics = manager.getEpic();
+                        String response = gson.toJson(epics);
                         sendText(httpExchange, response);
-                        System.out.println("возвращаем список подзадачть по епик id= " + idPath);
-                    } else if (path.split("/").length == 3) {
-                        String response = gson.toJson(epic);
-                        sendText(httpExchange, response);
-                        System.out.println("возвращаем  епик " + idPath);
+                        System.out.println("возвращаем все епики");
+                        return;
+                    }
+                    Epic epic = manager.getToIdEpic(idPath);
+                    if (epic != null) {
+                        if ((path.split("/").length > 3) && (path.split("/")[3].equals("subtasks"))) {
+                            List<SubTask> subTaskList = manager.getToIdSubtaskInEpic(idPath);
+                            String response = gson.toJson(subTaskList);
+                            sendText(httpExchange, response);
+                            System.out.println("возвращаем список подзадачть по епик id= " + idPath);
+                        } else if (path.split("/").length == 3) {
+                            String response = gson.toJson(epic);
+                            sendText(httpExchange, response);
+                            System.out.println("возвращаем  епик " + idPath);
+                        } else {
+                            sendMethodNotAllowed(httpExchange);
+                            System.out.println("нет такого действия");
+                        }
+
                     } else {
                         sendNotFound(httpExchange);
-                        System.out.println("нет такого действия");
+                        System.out.println("епик id=" + idPath + " нет");
                     }
 
-                } else {
-                    sendNotFound(httpExchange);
-                    System.out.println("епик id=" + idPath + " нет");
                 }
+                sendMethodNotAllowed(httpExchange);
                 break;
             }
             case ("POST"): {
@@ -76,7 +81,7 @@ public class EpicTaskHandler extends BaseHttpHandler implements HttpHandler {
                     } else
                         try {
                             manager.newEpic(epic);
-                            System.out.println("Епик создан" + '\n' + gson.toJson(epic));
+                            System.out.println("Епик создан");
                             sendOk(httpExchange);
                         } catch (ManagerException e) {
                             System.out.println("пересекается с существующими");
@@ -84,7 +89,7 @@ public class EpicTaskHandler extends BaseHttpHandler implements HttpHandler {
                         }
                 } else {
                     System.out.println("нет такого действия");
-                    sendNotFound(httpExchange);
+                    sendMethodNotAllowed(httpExchange);
                 }
                 break;
             }
@@ -104,7 +109,7 @@ public class EpicTaskHandler extends BaseHttpHandler implements HttpHandler {
                 }
             }
             default:
-                sendNotFound(httpExchange);
+                sendBadRequest(httpExchange);
         }
     }
 }

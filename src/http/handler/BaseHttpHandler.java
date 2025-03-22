@@ -1,10 +1,14 @@
 package http.handler;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
+import http.LocalDataTimeAdapter;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 public class BaseHttpHandler {
 
@@ -36,5 +40,24 @@ public class BaseHttpHandler {
         httpExchange.close();
     }
 
+    protected void sendErr(HttpExchange httpExchange) throws IOException {
+        httpExchange.sendResponseHeaders(500, 0);
+        httpExchange.close();
+    }
 
+    protected void sendBadRequest(HttpExchange httpExchange) throws IOException {
+        httpExchange.sendResponseHeaders(400, 0);
+        httpExchange.close();
+    }
+
+    protected void sendMethodNotAllowed(HttpExchange httpExchange) throws IOException {
+        httpExchange.sendResponseHeaders(405, 0);
+        httpExchange.close();
+    }
+
+    public static Gson getGson() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDataTimeAdapter());
+        return gsonBuilder.create();
+    }
 }

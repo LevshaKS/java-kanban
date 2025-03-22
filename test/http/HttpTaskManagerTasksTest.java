@@ -2,6 +2,7 @@ package http;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import http.handler.BaseHttpHandler;
 import managers.InMemoryHistoryManager;
 import managers.InMemoryTaskManager;
 import managers.TaskManager;
@@ -24,7 +25,7 @@ import java.util.List;
 public class HttpTaskManagerTasksTest {
     TaskManager taskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
     HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
-    Gson gson = HttpTaskServer.getGson();
+    Gson gson = BaseHttpHandler.getGson();
 
     public HttpTaskManagerTasksTest() throws IOException {
     }
@@ -44,7 +45,6 @@ public class HttpTaskManagerTasksTest {
 
     class UserListTypeToken extends TypeToken<List<Task>> {
     }
-
 
     @Test
     public void addTask() throws IOException, InterruptedException {

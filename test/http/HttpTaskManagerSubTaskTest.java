@@ -2,6 +2,7 @@ package http;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import http.handler.BaseHttpHandler;
 import managers.InMemoryHistoryManager;
 import managers.InMemoryTaskManager;
 import managers.TaskManager;
@@ -26,7 +27,7 @@ public class HttpTaskManagerSubTaskTest {
 
     TaskManager taskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
     HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
-    Gson gson = HttpTaskServer.getGson();
+    Gson gson = BaseHttpHandler.getGson();
 
     HttpResponse<String> response;
     HttpRequest request;
@@ -125,7 +126,6 @@ public class HttpTaskManagerSubTaskTest {
         Assertions.assertEquals("test subtask update", allTasks.get(0).getName(), "Некорректное имя задачи");
     }
 
-    /////////
     @Test
     public void getSubTask() throws IOException, InterruptedException {
 
@@ -179,7 +179,6 @@ public class HttpTaskManagerSubTaskTest {
         Assertions.assertEquals("[]", response.body(), "вернулся не пустой список задач");
 
         // проверяем возращение списка из всех тасков
-
 
         request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/subtasks"))

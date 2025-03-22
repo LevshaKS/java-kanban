@@ -1,7 +1,5 @@
 package http;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
 import http.handler.*;
 import managers.Managers;
@@ -32,12 +30,6 @@ public class HttpTaskServer {
         httpServer.createContext("/prioritized", new PrioritizedHandler(manager));
     }
 
-    public static Gson getGson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDataTimeAdapter());
-        return gsonBuilder.create();
-    }
-
     public void start() {
         httpServer.start();
         System.out.println("старт сервера на порту:" + PORT);
@@ -47,7 +39,6 @@ public class HttpTaskServer {
         httpServer.stop(0);
         System.out.println("остановка сервера на порту:" + PORT);
     }
-
 
     public static void main(String[] args) throws IOException {
 
@@ -71,7 +62,5 @@ public class HttpTaskServer {
 
         HttpTaskServer taskServer = new HttpTaskServer(manager);
         taskServer.start();
-
     }
-
 }

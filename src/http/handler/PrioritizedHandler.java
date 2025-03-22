@@ -3,7 +3,6 @@ package http.handler;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import http.HttpTaskServer;
 import managers.TaskManager;
 import tasks.Task;
 
@@ -17,16 +16,22 @@ public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
 
     public PrioritizedHandler(TaskManager manager) {
         this.manager = manager;
-        this.gson = HttpTaskServer.getGson();
+        this.gson = getGson();
     }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         final String path = httpExchange.getRequestURI().getPath();
-        System.out.println(path);
-        List<Task> priritizedList = manager.getPrioritizedTasks();
-        String repsone = gson.toJson(priritizedList);
-        sendText(httpExchange, repsone);
-        System.out.println("выводим задачи по приоритету");
+        final String method = httpExchange.getRequestMethod();
+        switch (method) {
+            case ("GET"): {
+                List<Task> priritizedList = manager.getPrioritizedTasks();
+                String repsone = gson.toJson(priritizedList);
+                sendText(httpExchange, repsone);
+                System.out.println("выводим задачи по приоритету");
+            }
+            default:
+                sendMethodNotAllowed(httpExchange);
+        }
     }
 }

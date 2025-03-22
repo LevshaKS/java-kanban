@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import exceptions.ManagerException;
-import http.HttpTaskServer;
 import managers.TaskManager;
 import tasks.SubTask;
 
@@ -19,7 +18,7 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler {
 
     public SubTaskHandler(TaskManager manager) {
         this.manager = manager;
-        gson = HttpTaskServer.getGson();
+        gson = getGson();
     }
 
     public Integer getIdFromPath(String path) {
@@ -36,23 +35,27 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler {
         final String method = httpExchange.getRequestMethod();
         switch (method) {
             case ("GET"): {
-                if (idPath == null) {
-                    List<SubTask> subTask = manager.getSubTask();
-                    String response = gson.toJson(subTask);
-                    sendText(httpExchange, response);
-                    System.out.println("возвращаем все саптаски");
-                    return;
+                if ((path.split("/").length > 3))
+                    sendMethodNotAllowed(httpExchange);
+                else {
+                    if (idPath == null) {
+                        List<SubTask> subTask = manager.getSubTask();
+                        String response = gson.toJson(subTask);
+                        sendText(httpExchange, response);
+                        System.out.println("возвращаем все саптаски");
+                        return;
+                    }
+                    SubTask subTasktask = manager.getToIdSubTask(idPath);
+                    if (subTasktask != null) {
+                        String response = gson.toJson(subTasktask);
+                        sendText(httpExchange, response);
+                        System.out.println("возвращаем  саптаску " + idPath);
+                    } else {
+                        sendNotFound(httpExchange);
+                        System.out.println("саптаски id=" + idPath + " нет");
+                    }
                 }
-                SubTask subTasktask = manager.getToIdSubTask(idPath);
-                if (subTasktask != null) {
-                    String response = gson.toJson(subTasktask);
-                    sendText(httpExchange, response);
-                    System.out.println("возвращаем  саптаску " + idPath);
-                } else {
-                    sendNotFound(httpExchange);
-                    System.out.println("саптаски id=" + idPath + " нет");
-
-                }
+                sendMethodNotAllowed(httpExchange);
                 break;
             }
             case ("POST"): {
@@ -67,13 +70,14 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler {
                     } else
                         try {
                             manager.newSubTask(subTask);
-                            System.out.println("подзадача создана" + '\n' + gson.toJson(subTask));
+                            System.out.println("подзадача создана");
                             sendOk(httpExchange);
                         } catch (ManagerException e) {
                             System.out.println("пересекается с существующими");
                             sendHasInteractions(httpExchange);
                         }
-                }
+                } else
+                    sendMethodNotAllowed(httpExchange);
                 break;
             }
             case ("DELETE"): {
@@ -88,13 +92,12 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler {
                         System.out.println("удалили саптаску id= " + idPath);
                         sendText(httpExchange, "удалена подзадача id= " + idPath);
                     } else
-                        sendNotFound(httpExchange);
-
+                        sendMethodNotAllowed(httpExchange);
                 }
                 break;
             }
             default:
-                sendNotFound(httpExchange);
+                sendBadRequest(httpExchange);
         }
     }
 }
