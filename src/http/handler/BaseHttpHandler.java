@@ -31,11 +31,6 @@ public class BaseHttpHandler {
         httpExchange.close();
     }
 
-    protected void sendSaveErr(HttpExchange httpExchange) throws IOException {
-        httpExchange.sendResponseHeaders(500, 0);
-        httpExchange.close();
-    }
-
     protected void sendOk(HttpExchange httpExchange) throws IOException {
         httpExchange.sendResponseHeaders(201, 0);
         httpExchange.close();

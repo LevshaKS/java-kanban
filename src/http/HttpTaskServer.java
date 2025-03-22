@@ -51,8 +51,6 @@ public class HttpTaskServer {
 
 
     public static void main(String[] args) throws IOException {
-        String home = System.getProperty("user.dir");
-        home += "\\resources\\";
 
         Task task1 = new Task("задача_5", "описание задачи_5", LocalDateTime.now().plusHours(2), 15);
         Task task2 = new Task("задача_6", "описание задачи_6", LocalDateTime.now().plusHours(1), 25);
@@ -62,7 +60,7 @@ public class HttpTaskServer {
         SubTask subTask2 = new SubTask("subtask2", "подзадача epic3", 3, LocalDateTime.now().plusHours(10), 225);
         SubTask subTask3 = new SubTask("subtask3", "подзадача epic3", 3, LocalDateTime.now().plusHours(6), 25);
 
-        TaskManager manager = (InMemoryTaskManager) Managers.getDefault();
+        TaskManager manager = Managers.getDefault();
 
         manager.newTack(task1);
         manager.newTack(task2);
