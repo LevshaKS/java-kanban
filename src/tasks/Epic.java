@@ -12,14 +12,15 @@ public class Epic extends Task {
 
     private LocalDateTime endTime;
 
+
     public Epic(String name, String description) {
         super(name, description);
         this.status = Status.NEW;
         this.listSubTaskId = new ArrayList<>();
         this.type = Type.EPIC;
-        this.startTime = LocalDateTime.MAX;
+        this.startTime = LocalDateTime.of(0000, 01, 01, 01, 01, 00);
         this.duration = 0;
-        this.endTime = LocalDateTime.MIN;
+        this.endTime = LocalDateTime.of(9999, 01, 01, 01, 01, 00);
     }
 
     public Epic(int id, Type type, String name, Status status, String description) {
@@ -46,7 +47,8 @@ public class Epic extends Task {
     }
 
     public void clearListSubTask() {
-        listSubTaskId.clear();
+        if (!listSubTaskId.isEmpty())
+            listSubTaskId.clear();
     }
 
     @Override
@@ -67,7 +69,7 @@ public class Epic extends Task {
                 ", id=" + getId() +
                 ", status=" + status +
                 ", listSubTaskId=" + listSubTaskId.toString() +
-                ", startTime=" + startTime.format(formatter) +
+                ", startTime=" + startTime.format(getFormatter()) +
                 ", duration=" + duration +
                 "}" + '\n';
     }

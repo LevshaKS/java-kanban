@@ -79,7 +79,13 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(int id, Task task) {     // передача обновленого task по id
         if (id != 0 && task != null && taskMaps.containsKey(id)) {
-            prioritizedTasks.remove(task);
+            List<Task> tempPrioritizedTasks = new ArrayList<>(prioritizedTasks);
+            prioritizedTasks.clear();
+            tempPrioritizedTasks
+                    .forEach(task1 -> {
+                        if (task1.getId() != id)
+                            addPrioritizedTasks(task1);
+                    });
             addPrioritizedTasks(task);
             taskMaps.put(id, task);
         }
@@ -290,7 +296,8 @@ public class InMemoryTaskManager implements TaskManager {
         else {
             return getPrioritizedTasks().stream()
                     .anyMatch(task1 -> {
-                        return (task1.getStartTime().isBefore(startTaskTime) && task1.getEndTime().isAfter(endTaskTime)) ||
+                        return (task1.getStartTime().isEqual(startTaskTime) && task1.getEndTime().isEqual(endTaskTime) ||
+                                task1.getStartTime().isBefore(startTaskTime) && task1.getEndTime().isAfter(endTaskTime)) ||
                                 (task1.getStartTime().isAfter(startTaskTime) && task1.getEndTime().isBefore(endTaskTime)) ||
                                 (task1.getStartTime().isBefore(startTaskTime) && task1.getEndTime().isAfter(startTaskTime)) ||
                                 (task1.getStartTime().isBefore(endTaskTime) && task1.getEndTime().isAfter(endTaskTime));

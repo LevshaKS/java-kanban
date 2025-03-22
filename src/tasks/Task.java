@@ -17,7 +17,10 @@ public class Task {
 
     protected long duration;  // minuts
 
-    protected final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+    protected DateTimeFormatter getFormatter() {
+        return DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+    }
+    //  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
 
 
     public Task(String name, String description) {
@@ -115,7 +118,7 @@ public class Task {
     }
 
     public String toStringInFile() {
-        return String.format("%s,%s,%s,%s,%s,%s,%s", id, type, name, status, description, startTime.format(formatter), duration);
+        return String.format("%s,%s,%s,%s,%s,%s,%s", id, type, name, status, description, startTime.format(getFormatter()), duration);
     }
 
     @Override
@@ -126,7 +129,7 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
-                ", startTime=" + startTime.format(formatter) +
+                ", startTime=" + startTime.format(getFormatter()) +
                 ", duration=" + duration +
                 "}" + '\n';
     }

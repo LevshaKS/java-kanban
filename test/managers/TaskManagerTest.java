@@ -227,13 +227,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.updateSubTask(2, subTask1);
         Assertions.assertEquals(Status.IN_PROGRESS, taskManager.getToIdEpic(1).getStatus(), "статус не совпал");
         subTask2.setStatus(Status.IN_PROGRESS);
-        taskManager.updateSubTask(2, subTask2);
+        taskManager.updateSubTask(3, subTask2);
         Assertions.assertEquals(Status.IN_PROGRESS, taskManager.getToIdEpic(1).getStatus(), "статус не совпал");
         subTask1.setStatus(Status.DONE);
         taskManager.updateSubTask(2, subTask1);
         Assertions.assertEquals(Status.IN_PROGRESS, taskManager.getToIdEpic(1).getStatus(), "статус не совпал");
         subTask2.setStatus(Status.DONE);
-        taskManager.updateSubTask(2, subTask2);
+        taskManager.updateSubTask(3, subTask2);
         Assertions.assertEquals(Status.DONE, taskManager.getToIdEpic(1).getStatus(), "статус не совпал");
     }
 }

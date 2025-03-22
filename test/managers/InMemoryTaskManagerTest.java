@@ -88,6 +88,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest {
         task2.setStartTime(LocalDateTime.now().minusHours(2));
         taskManager.updateTask(2, task2);
         Assertions.assertEquals(task2, taskManager.getPrioritizedTasks().get(0), "порядок записей не соответствует");
+
     }
 
 }
