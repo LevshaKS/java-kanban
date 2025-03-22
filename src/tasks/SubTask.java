@@ -38,7 +38,7 @@ public class SubTask extends Task {
 
     @Override
     public String toStringInFile() {
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", id, type, name, status, description, startTime.format(formatter), duration, epicId);
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", id, type, name, status, description, startTime.format(getFormatter()), duration, epicId);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class SubTask extends Task {
                 ", description='" + getDescription() + '\'' +
                 ", id=" + getId() +
                 ", status=" + status +
-                ", startTime=" + startTime.format(formatter) +
+                ", startTime=" + startTime.format(getFormatter()) +
                 ", duration=" + duration +
                 ", epicId=" + epicId +
                 "} " + '\n';
