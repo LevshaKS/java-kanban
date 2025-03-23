@@ -37,6 +37,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void newTack(Task task) {
         super.newTack(task);
         save();
+
     }
 
     @Override
