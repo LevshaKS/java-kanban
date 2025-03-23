@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import http.LocalDataTimeAdapter;
+import managers.TaskManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,6 +12,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 public class BaseHttpHandler {
+
+    protected  TaskManager manager;
+    protected  Gson gson;
 
     protected String readText(HttpExchange httpExchange) throws IOException {
         return new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);

@@ -1,6 +1,5 @@
 package http.handler;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import exceptions.ManagerException;
@@ -13,10 +12,7 @@ import java.util.List;
 
 public class SubTaskHandler extends BaseHttpHandler implements HttpHandler {
 
-    private final TaskManager manager;
-    private final Gson gson;
-
-    public SubTaskHandler(TaskManager manager) {
+      public SubTaskHandler(TaskManager manager) {
         this.manager = manager;
         gson = getGson();
     }
